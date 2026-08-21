@@ -1,0 +1,19 @@
+[package]
+name = "mqtt-screen-control"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+description = "Control DDC/CI monitor brightness through MQTT"
+
+[dependencies]
+anyhow = "1.0.100"
+clap = { version = "4.5.53", features = ["derive"] }
+ddc-hi = { version = "0.4.1", default-features = false, features = ["ddc-i2c"] }
+rumqttc = { version = "0.25.1", features = ["url"] }
+serde = { version = "1.0.228", features = ["derive"] }
+serde_json = "1.0.145"
+serde_yaml = "0.9.34"
+tracing = "0.1.41"
+tracing-subscriber = { version = "0.3.20", features = ["env-filter"] }
+tokio = { version = "1.48.0", features = ["macros", "rt-multi-thread", "sync", "time"] }
+url = "2.5.8"

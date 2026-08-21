@@ -1,0 +1,16 @@
+services:
+  mqtt-screen-control:
+    build: .
+    restart: unless-stopped
+    environment:
+      RUST_LOG: ${RUST_LOG:-info}
+    volumes:
+      - ./config:/app/config:ro
+    # External displays are connected through the NVIDIA DDC/CI adapters on this host.
+    devices:
+      - /dev/i2c-3:/dev/i2c-3
+      - /dev/i2c-4:/dev/i2c-4
+      - /dev/i2c-5:/dev/i2c-5
+      - /dev/i2c-6:/dev/i2c-6
+    group_add:
+      - "967" # Host i2c group GID (`getent group i2c`).
