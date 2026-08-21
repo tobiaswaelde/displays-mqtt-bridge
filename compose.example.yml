@@ -1,0 +1,17 @@
+services:
+  mqtt-screen-control:
+    image: ghcr.io/tobiaswaelde/mqtt-screen-control:latest
+    restart: unless-stopped
+    environment:
+      RUST_LOG: info
+    volumes:
+      - ./config:/app/config:ro
+    # Replace these adapters with the DDC/CI-capable adapters from `i2cdetect -l`.
+    devices:
+      - /dev/i2c-3:/dev/i2c-3
+      - /dev/i2c-4:/dev/i2c-4
+      - /dev/i2c-5:/dev/i2c-5
+      - /dev/i2c-6:/dev/i2c-6
+    # Use the numeric GID reported by `getent group i2c` on the host.
+    group_add:
+      - "967"
