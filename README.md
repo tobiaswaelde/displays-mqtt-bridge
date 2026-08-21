@@ -1,5 +1,7 @@
 # MQTT screen control
 
+[![Buy me a coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-FFDD00?logo=buymeacoffee&logoColor=000000)](https://www.buymeacoffee.com/tobiaswaelde)
+
 A small Rust service that changes the brightness of DDC/CI-capable external monitors through MQTT. It detects every monitor available via the mounted `/dev/i2c-*` devices and can address one monitor or all monitors together.
 
 ## Run with Docker
