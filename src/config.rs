@@ -1,7 +1,7 @@
 use std::{fs, path::Path, time::Duration};
 
 use anyhow::{Context, Result, bail};
-use rumqttc::{MqttOptions, Transport};
+use rumqttc::{MqttOptions, TlsConfiguration, Transport};
 use serde::Deserialize;
 use uuid::Uuid;
 
@@ -71,7 +71,7 @@ pub fn mqtt_options(config: &Config) -> Result<MqttOptions> {
         .unwrap_or_else(|| Uuid::new_v4().to_string());
     let mut options = MqttOptions::new(client_id, &config.mqtt.host, config.mqtt.port);
     if tls {
-        options.set_transport(Transport::tls_with_default_config());
+        options.set_transport(Transport::tls_with_config(TlsConfiguration::Native));
     }
     options.set_keep_alive(Duration::from_secs(30));
 

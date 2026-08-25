@@ -9,7 +9,7 @@ description = "Control DDC/CI monitor brightness through MQTT"
 anyhow = "1.0.100"
 clap = { version = "4.5.53", features = ["derive"] }
 ddc-hi = { version = "0.4.1", default-features = false, features = ["ddc-i2c"] }
-rumqttc = { version = "0.25.1", features = ["url"] }
+rumqttc = { version = "0.25.1", default-features = false, features = ["url", "use-native-tls"] }
 serde = { version = "1.0.228", features = ["derive"] }
 serde_json = "1.0.145"
 serde_yaml = "0.9.34"
