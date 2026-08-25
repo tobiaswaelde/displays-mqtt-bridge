@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-08-26
+
 ### Added
 
 - A VitePress documentation site with deployment, hardware, MQTT, configuration,
@@ -27,6 +29,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Docker builds now include the patched `nom` dependency required by `ddc-hi`.
 - Restored CI, documentation deployment, and release workflow compatibility
   with pnpm 11 and GitHub Pages.
+- Replaced the vulnerable Rustls MQTT TLS backend with native TLS and OpenSSL.
+- Updated the Rust dependency lockfile and documentation build dependencies.
 
 ## [0.1.0] - 2026-08-22
 
