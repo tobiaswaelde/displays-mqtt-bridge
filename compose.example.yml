@@ -1,6 +1,6 @@
 services:
-  mqtt-screen-control:
-    image: ghcr.io/tobiaswaelde/mqtt-screen-control:latest
+  displays-mqtt-bridge:
+    image: ghcr.io/tobiaswaelde/displays-mqtt-bridge:latest
     restart: unless-stopped
     environment:
       RUST_LOG: info

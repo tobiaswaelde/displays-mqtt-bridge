@@ -1,9 +1,13 @@
 <!-- omit in toc -->
-# 🖥️ MQTT screen control
+# 🖥️ Displays MQTT Bridge
 
-[![Buy me a coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-FFDD00?logo=buymeacoffee&logoColor=000000)](https://www.buymeacoffee.com/tobiaswaelde)
+[![CI](https://github.com/tobiaswaelde/displays-mqtt-bridge/actions/workflows/ci.yml/badge.svg)](https://github.com/tobiaswaelde/displays-mqtt-bridge/actions/workflows/ci.yml) [![Docs](https://github.com/tobiaswaelde/displays-mqtt-bridge/actions/workflows/docs.yml/badge.svg)](https://tobiaswaelde.github.io/displays-mqtt-bridge/) [![Deploy](https://github.com/tobiaswaelde/displays-mqtt-bridge/actions/workflows/deploy.yml/badge.svg)](https://github.com/tobiaswaelde/displays-mqtt-bridge/actions/workflows/deploy.yml)
+
+[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-tobiaswaelde-FFDD00?style=for-the-badge&logo=buymeacoffee)](https://www.buymeacoffee.com/tobiaswaelde)
 
 A small Rust service that controls DDC/CI-capable external monitors through MQTT. It detects every monitor available through the mounted `/dev/i2c-*` devices and can set the brightness of an individual display or every display at once.
+
+Full documentation is available at [tobiaswaelde.github.io/displays-mqtt-bridge](https://tobiaswaelde.github.io/displays-mqtt-bridge/).
 
 - [🚀 Quick start](#-quick-start)
 - [🐳 Docker](#-docker)
@@ -19,7 +23,7 @@ A small Rust service that controls DDC/CI-capable external monitors through MQTT
 
 ```sh
 cp config/config.example.yml config/config.yml
-# Edit broker, credentials, base topic, and update interval.
+# Edit the broker connection, credentials, topic, and update interval.
 $EDITOR config/config.yml
 docker compose up --build -d
 ```
@@ -61,17 +65,22 @@ The application uses the same configuration and MQTT topics in both modes.
 `config/config.yml`:
 
 ```yaml
-broker: mqtt://mosquitto:1883
-client_id: mqtt-screen-control
-username: screen-control
-password: change-me
-base_topic: screens/office
+mqtt:
+  protocol: mqtt
+  host: mosquitto
+  port: 1883
+  client_id: ''
+  username: screen-control
+  password: change-me
+topic: screens/office
 update_interval_secs: 60
 ```
 
-The service subscribes to `<base_topic>/cmd` with QoS 1. It publishes an initial and command-result status document, retained, to `<base_topic>/status`.
+`client_id` is optional. When it is omitted or empty, the bridge generates a UUID for the running process.
 
-Every detected display additionally publishes retained DDC/CI data below `<base_topic>/displays/<index>/`. `identity` contains EDID identity data. The following VCP features are intentionally limited to `brightness`, `contrast`, `red_gain`, `green_gain`, `blue_gain`, `input_source`, `speaker_volume`, and `power_mode`.
+The service subscribes to `<topic>/cmd` with QoS 1. It publishes an initial and command-result status document, retained, to `<topic>/status`.
+
+Every detected display additionally publishes retained DDC/CI data below `<topic>/displays/<index>/`. `identity` contains EDID identity data. The following VCP features are intentionally limited to `brightness`, `contrast`, `red_gain`, `green_gain`, `blue_gain`, `input_source`, `speaker_volume`, and `power_mode`.
 
 Each feature has three direct subtopics, for example:
 
@@ -91,10 +100,10 @@ The default level is `info`. Control it with `RUST_LOG`; messages include MQTT c
 
 ```sh
 # Detailed MQTT and DDC/CI diagnostics without Docker
-RUST_LOG=mqtt_screen_control=debug cargo run --release -- --config config/config.yml
+RUST_LOG=displays_mqtt_bridge=debug cargo run --release -- --config config/config.yml
 
 # Include every individual VCP read (very verbose)
-RUST_LOG=mqtt_screen_control=trace cargo run --release -- --config config/config.yml
+RUST_LOG=displays_mqtt_bridge=trace cargo run --release -- --config config/config.yml
 
 # Use the same level with Docker Compose
 RUST_LOG=debug docker compose up
@@ -137,4 +146,4 @@ Brightness is set through the standard MCCS VCP feature `0x10` (luminance). The 
 
 ## 🔄 CI and deployment
 
-GitHub Actions runs formatting, Clippy, tests, a release build, and a Docker image build for pull requests and pushes to `main`. Pushing a version tag such as `v1.2.3` builds and publishes the image to GitHub Container Registry under `ghcr.io/<owner>/mqtt-screen-control` with the tags `1.2.3`, `1.2`, and `latest`. The deployment workflow can also be started manually and requires an additional image tag.
+GitHub Actions runs formatting, Clippy, tests, a release build, and a Docker image build for pull requests and pushes to `main`. Pushing a version tag such as `v1.2.3` builds and publishes the image to GitHub Container Registry under `ghcr.io/<owner>/displays-mqtt-bridge` with the tags `1.2.3`, `1.2`, and `latest`. The deployment workflow can also be started manually and requires an additional image tag.

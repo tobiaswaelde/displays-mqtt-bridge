@@ -20,10 +20,10 @@ pub async fn run(config: Config) -> Result<()> {
     let update_interval = update_interval(&config);
     let (broker_host, broker_port) = options.broker_address();
     let (client, mut eventloop) = AsyncClient::new(options, 4096);
-    let publisher = Publisher::new(client, &config.base_topic);
+    let publisher = Publisher::new(client, &config.topic);
     publisher.subscribe_to_commands().await?;
 
-    info!(%broker_host, broker_port, base_topic = %config.base_topic, update_interval_secs = config.update_interval_secs, "starting MQTT screen controller");
+    info!(%broker_host, broker_port, topic = %config.topic, update_interval_secs = config.update_interval_secs, "starting MQTT screen controller");
     let (scan_sender, mut scan_receiver) = unbounded_channel();
     let mut controller = Some(ScreenController::new());
     let mut last_displays = vec![];

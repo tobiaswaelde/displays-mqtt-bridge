@@ -1,12 +1,14 @@
-# MQTT URL; mqtt:// and mqtts:// are supported by rumqttc.
-broker: mqtt://mosquitto:1883
-client_id: mqtt-screen-control
-username: screen-control
-password: change-me
+mqtt:
+  protocol: mqtt
+  host: mosquitto
+  port: 1883
+  client_id: '' # Optional; a UUID is generated when this value is empty.
+  username: screen-control
+  password: change-me
 
-# Commands are received at <base_topic>/cmd.
-# Status is published (retained) at <base_topic>/status.
-base_topic: screens/office
+# Commands are received at <topic>/cmd.
+# Status is published (retained) at <topic>/status.
+topic: screens/office
 
 # Refresh the configured display values every 60 seconds. Must be greater than zero.
 update_interval_secs: 60

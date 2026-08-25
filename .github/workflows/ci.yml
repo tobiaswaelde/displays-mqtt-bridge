@@ -47,4 +47,4 @@ jobs:
         run: cargo build --release
 
       - name: Build container image
-        run: docker build --tag mqtt-screen-control:test .
+        run: docker build --tag displays-mqtt-bridge:test .

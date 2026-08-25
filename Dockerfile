@@ -12,7 +12,7 @@ FROM debian:bookworm-slim
 RUN apt-get update \
     && apt-get install -y --no-install-recommends ca-certificates libudev1 \
     && rm -rf /var/lib/apt/lists/*
-COPY --from=builder /src/target/release/mqtt-screen-control /usr/local/bin/mqtt-screen-control
+COPY --from=builder /src/target/release/displays-mqtt-bridge /usr/local/bin/displays-mqtt-bridge
 USER 65534:65534
-ENTRYPOINT ["/usr/local/bin/mqtt-screen-control"]
+ENTRYPOINT ["/usr/local/bin/displays-mqtt-bridge"]
 CMD ["--config", "/app/config/config.yml"]

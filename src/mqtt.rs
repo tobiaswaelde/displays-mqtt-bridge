@@ -8,19 +8,19 @@ use crate::protocol::{Publication, Status};
 #[derive(Clone)]
 pub struct Publisher {
     client: AsyncClient,
-    base_topic: String,
+    topic: String,
 }
 
 impl Publisher {
-    pub fn new(client: AsyncClient, base_topic: &str) -> Self {
+    pub fn new(client: AsyncClient, topic: &str) -> Self {
         Self {
             client,
-            base_topic: base_topic.trim_matches('/').to_owned(),
+            topic: topic.trim_matches('/').to_owned(),
         }
     }
 
     pub fn command_topic(&self) -> String {
-        format!("{}/cmd", self.base_topic)
+        format!("{}/cmd", self.topic)
     }
 
     pub async fn subscribe_to_commands(&self) -> Result<()> {
@@ -45,7 +45,7 @@ impl Publisher {
     }
 
     async fn publish<T: Serialize>(&self, suffix: &str, value: &T) -> Result<()> {
-        let topic = format!("{}/{}", self.base_topic, suffix);
+        let topic = format!("{}/{}", self.topic, suffix);
         let payload = serde_json::to_vec(value).context("could not serialize MQTT payload")?;
         trace!(%topic, bytes = payload.len(), "publishing retained MQTT payload");
         self.client

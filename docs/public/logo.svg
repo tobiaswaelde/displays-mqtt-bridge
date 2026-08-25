@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Displays MQTT Bridge</title>
+  <desc id="desc">A display connected to three MQTT signal nodes.</desc>
+  <defs>
+    <linearGradient id="screen" x1="126" y1="96" x2="386" y2="416" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#38bdf8"/>
+      <stop offset="1" stop-color="#6366f1"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="124" y1="123" x2="386" y2="352" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0f172a"/>
+      <stop offset="1" stop-color="#1e293b"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="#020617"/>
+  <path d="M154 114h204c20 0 36 16 36 36v164c0 20-16 36-36 36H154c-20 0-36-16-36-36V150c0-20 16-36 36-36Z" fill="url(#screen)"/>
+  <path d="M154 138h204c7 0 12 5 12 12v164c0 7-5 12-12 12H154c-7 0-12-5-12-12V150c0-7 5-12 12-12Z" fill="url(#panel)"/>
+  <path d="M188 282c34-60 64 16 102-48 24-40 44-28 70-78" fill="none" stroke="#67e8f9" stroke-linecap="round" stroke-width="14"/>
+  <path d="M218 350v38m76-38v38m-112 0h148" fill="none" stroke="#cbd5e1" stroke-linecap="round" stroke-width="18"/>
+  <path d="M256 388v32" stroke="#cbd5e1" stroke-linecap="round" stroke-width="18"/>
+  <path d="M346 207h45m-22-23v46" fill="none" stroke="#818cf8" stroke-linecap="round" stroke-width="10"/>
+  <circle cx="408" cy="207" r="18" fill="#a5b4fc"/>
+  <circle cx="408" cy="266" r="12" fill="#38bdf8"/>
+  <circle cx="408" cy="314" r="8" fill="#67e8f9"/>
+</svg>
