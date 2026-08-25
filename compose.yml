@@ -1,5 +1,5 @@
 services:
-  mqtt-screen-control:
+  displays-mqtt-bridge:
     build: .
     restart: unless-stopped
     environment:
