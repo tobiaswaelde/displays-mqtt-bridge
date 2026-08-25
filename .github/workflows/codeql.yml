@@ -1,0 +1,31 @@
+name: CodeQL
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: '23 3 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  analyze:
+    name: Analyze Rust
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Install DDC/CI build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes libudev-dev pkg-config
+      - uses: github/codeql-action/init@v4
+        with:
+          languages: rust
+          build-mode: autobuild
+      - uses: github/codeql-action/autobuild@v4
+      - uses: github/codeql-action/analyze@v4
