@@ -1,0 +1,63 @@
+name: Tag and release version
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  tag-release:
+    name: Tag merged version
+    runs-on: ubuntu-latest
+    permissions: { contents: write }
+    outputs:
+      created: ${{ steps.tag.outputs.created }}
+      tag: ${{ steps.tag.outputs.tag }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 2
+      - id: tag
+        name: Create version tag when Cargo version changed
+        shell: bash
+        run: |
+          if git diff --quiet HEAD^ HEAD -- Cargo.toml; then
+            echo 'created=false' >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          VERSION="$(sed -nE 's/^version = "([^"]+)"$/\1/p' Cargo.toml | head -n 1)"
+          test -n "$VERSION"
+          TAG="v${VERSION}"
+          if git ls-remote --exit-code --tags origin "refs/tags/${TAG}"; then
+            echo 'created=false' >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git tag --annotate "$TAG" --message "Release ${TAG}"
+          git push origin "refs/tags/${TAG}"
+          echo 'created=true' >> "$GITHUB_OUTPUT"
+          echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
+
+  create-release:
+    needs: tag-release
+    if: needs.tag-release.outputs.created == 'true'
+    runs-on: ubuntu-latest
+    permissions: { contents: write }
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ needs.tag-release.outputs.tag }}
+      - uses: softprops/action-gh-release@v3
+        with:
+          tag_name: ${{ needs.tag-release.outputs.tag }}
+          generate_release_notes: true
+
+  deploy:
+    needs: tag-release
+    if: needs.tag-release.outputs.created == 'true'
+    uses: ./.github/workflows/deploy.yml
+    with:
+      tag: ${{ needs.tag-release.outputs.tag }}
+    permissions: { contents: read, packages: write }
